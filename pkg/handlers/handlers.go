@@ -81,16 +81,21 @@ func handlePushEvent(r *echo.Echo, config config.Config, event notifications.Eve
 		for _, service := range services {
 			if strings.Contains(service.Image, repo) {
 				for _, cmd := range service.Pre {
-					newCmd1 := strings.Replace(cmd, "{}", imageTag, 1)
-					notify(exec.Execute(newCmd1), config)
+					c1 := strings.Replace(cmd, "{}", imageTag, 1)
+					exec.Execute(c1)
 
-					newCmd2 := strings.Replace(cmd, "{}", imageSha256, 1)
-					notify(exec.Execute(newCmd2), config)
+					c2 := strings.Replace(cmd, "{}", imageSha256, 1)
+					exec.Execute(c2)
+					notify(exec.Execute(c2),
+						fmt.Sprintf("to pull: `%s:%s`", repo, sha256),
+						config)
 				}
 
 				for _, cmd := range service.Post {
-					newCmd := strings.Replace(cmd, "{}", service.Name, 1)
-					notify(exec.Execute(newCmd), config)
+					c := strings.Replace(cmd, "{}", service.Name, 1)
+					notify(exec.Execute(c),
+						fmt.Sprintf("to update: `%s`", repo),
+						config)
 				}
 			}
 		}
@@ -104,12 +109,21 @@ func getSHA256Code(url string) string {
 	return url[idx+1:]
 }
 
-func notify(ret string, config config.Config) {
-	sendSlack(
-		config.Notify.Slack.WebHook,
-		config.Notify.Slack.Channel,
-		ret,
-	)
+func notify(ret bool, text string, config config.Config) {
+	if ret {
+		msg := fmt.Sprintf(config.Notify.Slack.Message.Success.Head, text)
+		sendSlack(
+			config.Notify.Slack.WebHook,
+			config.Notify.Slack.Channel,
+			msg)
+
+	} else {
+		msg := fmt.Sprintf(config.Notify.Slack.Message.Fail.Head, text)
+		sendSlack(
+			config.Notify.Slack.WebHook,
+			config.Notify.Slack.Channel,
+			msg)
+	}
 }
 
 func sendSlack(webhook string, channel string, message string) {

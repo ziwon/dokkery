@@ -6,13 +6,13 @@ import (
 	"time"
 )
 
-func Execute(cmd string) string {
+func Execute(cmd string) bool {
 	_, err := exec.Command("sh", "-c", cmd).Output()
 	if err != nil {
 		fmt.Println(err)
-		return fmt.Sprintf("Failed to execute command: `%s`", cmd)
+		return false
 	}
 
 	time.Sleep(5 * time.Second)
-	return fmt.Sprintf("Succeed: `%s`", cmd)
+	return true
 }

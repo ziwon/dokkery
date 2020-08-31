@@ -15,4 +15,9 @@ notify:
   slack:
     webhook: "https://hooks.slack.com/services/foo/bar"
     channel: "#alert"
+    message:
+      success:
+        head: ":sunglasses: Succeed %s"
+      fail:
+        head: ":scream: Failed %s"
 

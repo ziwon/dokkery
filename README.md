@@ -17,14 +17,18 @@ registry:
       - name: "dokkery"
         image: "localhost:5000/api/dokkery:latest"
         pre:
-          - "docker pull {}"
+          - "echo 'docker pull {}'"
         post:
-          - "docker service update {} --force"
+          - "echo 'docker service update {} --force'"
 notify:
   slack:
     webhook: "https://hooks.slack.com/services/foo/bar"
     channel: "#alert"
-
+    message:
+      success:
+        head: ":sunglasses: Succeed %s"
+      fail:
+        head: ":scream: Failed %s"
 ```
 
 Then `dokkery` will execute the above commands and will notify the results:
