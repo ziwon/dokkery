@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  registry:
+    image: registry:2
+    ports:
+      - 5000:5000
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLED: 'true'
+      REGISTRY_HTTP_SECRET: "SuperDuperTopSecret"
+    volumes:
+      - ${PWD}/data/registry/config.yml:/etc/docker/registry/config.yml
+      - ${PWD}/data/registry/auth/:/auth/
+      - registry_data:/var/lib/registry
+    networks:
+      - overlay
+
+  dokkery:
+    image: ziwon/dokkery:latest
+    build:
+      context: .
+    networks:
+      - overlay
+
+networks:
+  overlay:
+
+volumes:
+  registry_data:

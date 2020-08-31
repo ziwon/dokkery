@@ -1,0 +1,18 @@
+server:
+  address: ":8080"
+
+registry:
+  domain: registry.docker.local
+  onpush:
+    services:
+      - name: "dokkery"
+        image: "localhost:5000/api/dokkery:latest"
+        pre:
+          - "echo 'docker pull {}'"
+        post:
+          - "echo 'docker service update {} --force'"
+notify:
+  slack:
+    webhook: "https://hooks.slack.com/services/foo/bar"
+    channel: "#alert"
+

@@ -1,0 +1,37 @@
+version: "0.1"
+log:
+  fields:
+    service: registry
+storage:
+  delete:
+    enabled: true
+  cache:
+    blobdescriptor: inmemory
+  filesystem:
+    rootdirectory: /var/lib/registry
+http:
+  addr: 0.0.0.0:5000
+  headers:
+    X-Content-Type-Options: [nosniff]
+    Access-Control-Allow-Origin: ["*"]
+    Access-Control-Allow-Methods: ["HEAD", "GET", "OPTIONS", "DELETE"]
+    Access-Control-Allow-Headers: ["Authorization"]
+    Access-Control-Max-Age: [1728000]
+    Access-Control-Allow-Credentials: [true]
+    Access-Control-Expose-Headers: ["Docker-Content-Digest"]
+auth:
+  htpasswd:
+    realm: basic-realm
+    path: /auth/.htpasswd
+notifications:
+  endpoints:
+    - name: dokkery
+      disabled: false
+      url: http://dokkery:8080/api/v1/event
+      timeout: 1s
+      threshold: 10
+      backoff: 1s
+      ignore:
+        actions:
+          - pull
+
