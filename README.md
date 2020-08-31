@@ -31,6 +31,23 @@ Then `dokkery` will execute the above commands and will notify the results:
 
 ![](./docs/dokkery-with-slack.png)
 
+## Using ssh
+In production like the Swarm cluster, we recommend to use `ssh` to execute the privileged commands like `docker pull` or `docker service update`. You might have to configure a ssh connection in a `dokkery` container:
+
+```
+registry:
+  domain: registry.docker.local
+  onpush:
+    services:
+      - name: "swarm_go_app"
+        image: registry.docker.local/tools/go-app:latest
+        pre:
+          - "ssh server-01 docker pull {}"
+          - "ssh server-02 docker pull {}"
+        post:
+          - "ssh server-01 docker service update {} --force"
+```
+
 ## Todo
 
 Currently, it's very unstable.
