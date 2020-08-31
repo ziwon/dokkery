@@ -34,7 +34,7 @@ Then `dokkery` will execute the above commands and will notify the results:
 ## Using ssh
 In production like the Swarm cluster, we recommend to use `ssh` to execute the privileged commands like `docker pull` or `docker service update`. You might have to configure a ssh connection in a `dokkery` container:
 
-```
+```yml
 registry:
   domain: registry.docker.local
   onpush:
