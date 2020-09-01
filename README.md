@@ -1,6 +1,6 @@
 # dokkery
 
-**dokkery (따까리 in Korean)** is designed for handling private docker registry events with considering CI/CD in an on-premise environment.
+**dokkery (따까리 in Korean)** is designed for handling private docker registry events with considering CI/CD.
 
 ## Usage
 
