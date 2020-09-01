@@ -6,18 +6,18 @@ registry:
   onpush:
     services:
       - name: "dokkery"
-        image: "localhost:5000/api/dokkery:latest"
+        image: "dokkery:latest"
         pre:
           - "echo 'docker pull {}'"
         post:
           - "echo 'docker service update {} --force'"
 notify:
   slack:
-    webhook: "https://hooks.slack.com/services/foo/bar"
+    webhook: "https://hooks.slack.com/services/foo/bar/baz"
     channel: "#alert"
     message:
       success:
-        head: ":sunglasses: Succeed %s"
+        head: ":sunglasses: Succeeded %s"
       fail:
         head: ":scream: Failed %s"
 
