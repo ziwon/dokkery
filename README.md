@@ -24,7 +24,7 @@ registry_1  | time="2020-09-01T13:01:54.307170339Z" level=info msg="configuring 
 For testing purposes, let's change the tag of the docker image and push to the registry.
 
 ```
-$ docker tag ziwon/dokkery:latest localhost:5000/dokkery:latest (for testing purpose)
+$ docker tag ziwon/dokkery:latest localhost:5000/dokkery:latest
 $ docker push localhost:5000/dokkery:latest
 ```
 
