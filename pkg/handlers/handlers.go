@@ -25,7 +25,7 @@ func HandleEventPullOrPush(c echo.Context) error {
 		app.R.Logger.Errorf("Error on reading registry event payload: %s", err)
 		return err
 	}
-	defer c.Request().Body.Close()
+	defer c.Request().Body.Close() //nolint:errcheck
 
 	envelope := &notifications.Envelope{}
 	err = json.Unmarshal(payload, envelope)

@@ -1,0 +1,53 @@
+linters:
+  disable-all: true
+  enable:
+    - errcheck
+    - golint
+    - ineffassign
+    - unconvert
+    - misspell
+    - govet
+    - unused
+    - deadcode
+    - goconst
+    - gosec
+linters-settings:
+  gocyclo:
+    min-complexity: 11
+  errcheck:
+    ignore: fmt:.*,io/ioutil:^Read.*,github.com/spf13/cobra:MarkFlagRequired,github.com/spf13/viper:BindPFlag
+  golint:
+    min-confidence: 1.1
+
+run:
+  tests: false
+  concurrency: 2
+  timeout: 1m
+  issues-exit-code: 1
+  skip-dirs-use-default: true
+  modules-download-mode: readonly
+  allow-parallel-runners: false
+
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+  uniq-by-line: true
+  path-prefix: ""
+
+issues:
+  exclude-rules:
+    - path: tests\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+
+    - linters:
+        - lll
+      source: "^//go:generate "
+  exclude-use-default: false
+  exclude-case-sensitive: false
+  max-issues-per-linter: 0
+  max-same-issues: 0
