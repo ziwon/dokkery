@@ -13,11 +13,11 @@ registry:
           - "echo 'docker service update {} --force'"
 notify:
   slack:
-    webhook: "https://hooks.slack.com/services/foo/bar/baz"
+#    webhook: "https://hooks.slack.com/services/foo/bar/baz"
+    webhook: "https://hooks.slack.com/services/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"
     channel: "#alert"
     message:
       success:
         head: ":sunglasses: Succeeded %s"
       fail:
         head: ":scream: Failed %s"
-
