@@ -74,32 +74,30 @@ func handlePushEvent(r *echo.Echo, config config.Config, event notifications.Eve
 	sha256 := getSHA256Code(event.Target.URL)
 	tag := event.Target.Tag
 
-	imageTag := fmt.Sprintf("%s/%s:%s", domain, repo, tag)
+	//imageTag := fmt.Sprintf("%s/%s:%s", domain, repo, tag)
 	imageSha256 := fmt.Sprintf("%s/%s:%s@%s", domain, repo, tag, sha256)
 
-	go func() {
-		for _, service := range services {
-			if strings.Contains(service.Image, repo) {
-				for _, cmd := range service.Pre {
-					c1 := strings.Replace(cmd, "{}", imageTag, 1)
-					exec.Execute(c1)
-
-					c2 := strings.Replace(cmd, "{}", imageSha256, 1)
-					exec.Execute(c2)
-					notify(exec.Execute(c2),
+	for _, service := range services {
+		if strings.Contains(service.Image, repo) {
+			for _, cmd := range service.Pre {
+				c := strings.Replace(cmd, "{}", imageSha256, 1)
+				go func(c string) {
+					notify(exec.Execute(c),
 						fmt.Sprintf("to pull: `%s:%s`", repo, sha256),
 						config)
-				}
+				}(c)
+			}
 
-				for _, cmd := range service.Post {
-					c := strings.Replace(cmd, "{}", service.Name, 1)
+			for _, cmd := range service.Post {
+				c := strings.Replace(cmd, "{}", service.Name, 1)
+				go func(c string) {
 					notify(exec.Execute(c),
 						fmt.Sprintf("to update: `%s`", repo),
 						config)
-				}
+				}(c)
 			}
 		}
-	}()
+	}
 
 	return "", nil
 }
@@ -116,7 +114,6 @@ func notify(ret bool, text string, config config.Config) {
 			config.Notify.Slack.WebHook,
 			config.Notify.Slack.Channel,
 			msg)
-
 	} else {
 		msg := fmt.Sprintf(config.Notify.Slack.Message.Fail.Head, text)
 		sendSlack(
