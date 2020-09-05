@@ -29,4 +29,4 @@ archives:
     wrap_in_directory: true
 
 checksum:
-  name_template: "SHA256SUMS"
+  name_template: checksums.txt
