@@ -1,0 +1,32 @@
+before:
+  hooks:
+    - go mod download
+env:
+  - GO111MODULE=on
+  - CGO_ENABLED=0
+  - RELEASE_BUILDS=dist/dokkery_darwin_amd64/dokkery dist/dokkery_linux_amd64/dokkery
+
+builds:
+  - binary: dokkery
+    main: ./cmd/dokkery
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    ldflags:
+      - -s -w -X "main.version={{ .Tag }} ({{ .ShortCommit }} {{ .Date }})"
+
+archives:
+  - format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    replacements:
+      amd64: 64-bit
+      386: 32-bit
+      darwin: macOS
+    wrap_in_directory: true
+
+checksum:
+  name_template: "SHA256SUMS"
