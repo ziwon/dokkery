@@ -21,6 +21,6 @@ jobs:
         with:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          registry: ghcrp.io
+          registry: ghcr.io
           repository: ziwon/dokkery
           tag_with_ref: true
